@@ -1,6 +1,6 @@
 # TAUTH
 
-TAUTH is a text based verification program for SSH servers. TAUTH sends a SMS message or Email with a 5 digit pin that a user must enter in order to can access to a server. Users must be added individually and any user not added to TAUTH will be allowed to login as normal
+TAUTH is a SMS based Two-Factor authentication program for SSH servers. TAUTH sends a SMS message or Email with a 5 digit pin that a user must enter in order to can access to a server. Users must be added individually and any user not added to TAUTH will be allowed to login as normal
 
 ## How it works
 
