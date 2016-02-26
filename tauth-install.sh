@@ -4,7 +4,7 @@ SSH_CONF=""
 EMAIL_User=""
 EMAIL_Pass=""
 EMAIL_Serv="smtps://smtp.gmail.com:465"
-GITHUB_LOCATION="https://raw.githubusercontent.com/micahjmartin/main/master/tauth"
+GITHUB_LOCATION="https://raw.githubusercontent.com/micahjmartin/tauth/master"
 TAUTH_CONF="/etc/tauth/tauth_config"
 TAUTH_ROOT="/usr/local/tauth"
 
