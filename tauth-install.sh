@@ -71,10 +71,10 @@ cp $SSH_CONF "$SSH_CONF.bac"
 echo "ForceCommand $TAUTH_ROOT/tauth-login.sh" >> $SSH_CONF
 echo
 green "Install Successfull!"
+green "Please restart SSH server"
 }
 
 check_root
 check_ssh
 install_tauth
-service ssh restart
 rm $0
