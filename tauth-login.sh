@@ -49,6 +49,7 @@ if [[ -f $TAUTH_CONF ]]; then
 	EMAIL_Pass=$(cat $TAUTH_CONF | grep EmailPass | awk '{print $2}')
 	EMAIL_Serv=$(cat $TAUTH_CONF | grep EmailServer | awk '{print $2}')
 	EMAIL_Only=$(cat $TAUTH_CONF | grep EmailOnly | awk '{print $2}')
+    EMAIL_Only=${EMAIL_Only,,}
 	SSH_CONF=$(cat $TAUTH_CONF | grep SshConfig | awk '{print $2}')
 #	if [ $SSH_CONF == "" | $EMAIL_Only == "" ]; then
 #		red "Configuration file errors!"
