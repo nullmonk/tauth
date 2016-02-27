@@ -9,7 +9,7 @@ EMAIL_Only="No"
 TAUTH_CONF_ROOT="/etc/tauth"
 TAUTH_CONF=$TAUTH_CONF_ROOT/"tauth_config"
 TAUTH_ROOT="/usr/local/tauth"
-GITHUB_LOCATION="https://raw.githubusercontent.com/micahjmartin/tauth/smstext"
+GITHUB_LOCATION="https://raw.githubusercontent.com/micahjmartin/tauth/master"
 
 
 NOCOLOR='\033[0m'

@@ -10,7 +10,7 @@ TAUTH creates a login environment that SSH forces users to use. Users cannot esc
 
 ## Installation
 
-	$ curl https://raw.githubusercontent.com/micahjmartin/tauth/smstext/tauth-install.sh > tauth-install;
+	$ curl https://raw.githubusercontent.com/micahjmartin/tauth/master/tauth-install.sh > tauth-install;
 	$ chmod +x tauth-install;
 	$ ./tauth-install;
     $ service ssh restart
