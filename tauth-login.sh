@@ -50,10 +50,11 @@ if [[ -f $TAUTH_CONF ]]; then
 	EMAIL_Serv=$(cat $TAUTH_CONF | grep EmailServer | awk '{print $2}')
 	EMAIL_Only=$(cat $TAUTH_CONF | grep EmailOnly | awk '{print $2}')
 	SSH_CONF=$(cat $TAUTH_CONF | grep SshConfig | awk '{print $2}')
-	if [ $SSH_CONF == "" || $EMAIL_Only == "" ]; then
-		red "Configuration file errors!"
-		red "SshConfig missing or EmailOnly missing"
-	#green "Configuration file loaded"
+#	if [ $SSH_CONF == "" | $EMAIL_Only == "" ]; then
+#		red "Configuration file errors!"
+#		red "SshConfig missing or EmailOnly missing"
+#	#green "Configuration file loaded"
+#	fi
 else
 	red "No configuration file found! Restart Program!"
 	exit
@@ -72,7 +73,7 @@ while true; do
 		send "email"
 		break;;
         "sms" | "SMS" | "s" )
-		if [ $EMAIL_Only == "Yes" | $EMAIL_Only == "yes" ]; then
+		if [ "$EMAIL_Only" = "yes" ]; then
 			red "No SMS service! Sending email..."
 			send "email"
 		else
