@@ -1,27 +1,40 @@
 #!/bin/bash
+
 VERSION="1.0"
 SSH_CONF=""
 EMAIL_User=""
 EMAIL_Pass=""
 EMAIL_Serv="smtps://smtp.gmail.com:465"
-GITHUB_LOCATION="https://raw.githubusercontent.com/micahjmartin/tauth/master"
-TAUTH_CONF="/etc/tauth/tauth_config"
+EMAIL_Only="No"
+TAUTH_CONF_ROOT="/etc/tauth"
+TAUTH_CONF=$TAUTH_CONF_ROOT/"tauth_config"
 TAUTH_ROOT="/usr/local/tauth"
+GITHUB_LOCATION="https://raw.githubusercontent.com/micahjmartin/tauth/smstext"
+
 
 NOCOLOR='\033[0m'
 red() { CRED='\033[0;31m'; echo -e ${CRED}$1${NOCOLOR}; }
 blue() { CBLUE='\033[0;34m'; echo -e ${CBLUE}$1${NOCOLOR}; }
 green() { CGREEN='\033[0;32m'; echo -e ${CGREEN}$1${NOCOLOR}; }
 
-write_settings() {
-if [[ ! -d /etc/tauth ]]; then
-	mkdir "/etc/tauth"
+ifdir() {
+if [[ ! -d $1 ]]; then
+	mkdir -p $1
 fi
+}
+
+write_settings() {
+if [[ ! -d $TAUTH_CONF_ROOT ]]; then
+	mkdir -p $TAUTH_CONF_ROOT
+fi
+
 echo "Version "$VERSION > $TAUTH_CONF
 echo "EmailUser "$EMAIL_User >> $TAUTH_CONF
 echo "EmailPass "$EMAIL_Pass >> $TAUTH_CONF
 echo "EmailServer "$EMAIL_Serv >> $TAUTH_CONF
-echo "Users "$USERS >> $TAUTH_CONF
+echo "EmailOnly "$EMAIL_Only >> $TAUTH_CONF
+echo "SshConfig "$SSH_CONF >> $TAUTH_CONF
+green "Settings written to $TAUTH_CONF!"
 }
 
 check_root() {
@@ -54,14 +67,16 @@ fi
 
 install_tauth() {
 #make directory and curl program
-mkdir $TAUTH_ROOT
+ifdir $TAUTH_ROOT
 curl -sS $GITHUB_LOCATION/tauth-login.sh >> $TAUTH_ROOT/tauth-login.sh
-curl -sS $GITHUB_LOCATION/tauth-manager.sh >> /usr/local/tauth/tauth-manager.sh
+curl -sS $GITHUB_LOCATION/tauth-manager.sh >> $TAUTH_ROOT/tauth-manager.sh
 #make programs executable
 chmod +x $TAUTH_ROOT/tauth-manager.sh
 chmod +x $TAUTH_ROOT/tauth-login.sh
 #make sym link to tauth manager
-ln -s "$TAUTH_ROOT/tauth-manager.sh" "/usr/local/sbin/TAUTH"
+if [[ ! -f /usr/local/sbin/TAUTH ]]; then
+	ln -s "$TAUTH_ROOT/tauth-manager.sh" "/usr/local/sbin/TAUTH"
+fi
 #read user input and write it to config file
 read -p "Enter Gmail address: " EMAIL_User
 read -p "Enter Gmail password: " -s EMAIL_Pass

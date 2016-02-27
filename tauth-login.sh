@@ -1,5 +1,67 @@
 #!/bin/bash
- . source_code.sh
+
+VERSION="1.0"
+TAUTH_CONF_ROOT="/etc/tauth"
+TAUTH_CONF=$TAUTH_CONF_ROOT/"tauth_config"
+TAUTH_ROOT="/usr/local/tauth"
+
+#Colors for display
+NOCOLOR='\033[0m'
+red() { CRED='\033[0;31m'; echo -e ${CRED}$1${NOCOLOR}; }
+blue() { CBLUE='\033[0;34m'; echo -e ${CBLUE}$1${NOCOLOR}; }
+green() { CGREEN='\033[0;32m'; echo -e ${CGREEN}$1${NOCOLOR}; }
+
+
+
+
+check_ssh() {
+#find SSH config file
+if [[ -f /etc/ssh/sshd_config ]]; then
+	SSH_CONF="/etc/ssh/sshd_config"
+	#green "SSH config file found at "$SSH_CONF
+	
+else
+	red "No SSH config found in /etc/ssh/sshd_config"
+	read -p "Enter location of SSH config file: " loc
+	if [[ -f $loc ]]; then
+		SSH_CONF=$loc
+		green "SSH config file found at "$SSH_CONF
+	else
+		red "No SSH config found in "$loc
+		red "Exiting...."
+	fi
+fi
+}
+
+
+check_root() {
+#check root
+if [ $(whoami) != "root" ]; then
+	red "restart as root!"
+	red "Exiting...."
+	exit
+fi
+}
+
+load_settings() {
+if [[ -f $TAUTH_CONF ]]; then
+	EMAIL_User=$(cat $TAUTH_CONF | grep EmailUser | awk '{print $2}')
+	EMAIL_Pass=$(cat $TAUTH_CONF | grep EmailPass | awk '{print $2}')
+	EMAIL_Serv=$(cat $TAUTH_CONF | grep EmailServer | awk '{print $2}')
+	EMAIL_Only=$(cat $TAUTH_CONF | grep EmailOnly | awk '{print $2}')
+	SSH_CONF=$(cat $TAUTH_CONF | grep SshConfig | awk '{print $2}')
+	if [ $SSH_CONF == "" || $EMAIL_Only == "" ]; then
+		red "Configuration file errors!"
+		red "SshConfig missing or EmailOnly missing"
+	#green "Configuration file loaded"
+else
+	red "No configuration file found! Restart Program!"
+	exit
+fi
+}
+
+
+
 code=$(head /dev/urandom | tr -dc 0-9 | head -c5)
 
 sel() {
@@ -25,10 +87,10 @@ done
 #send mode[sms|email]
 send() {
 if [ $1 == "email" ]; then
-	echo -e "Subject: TAUTH Authentication Code\n\n$code" > mail.txt
-	curl -sS --url "$EMAIL_Serv" --ssl-reqd --mail-from "$EMAIL_User" --mail-rcpt "$EMAIL" --upload-file mail.txt --user "$EMAIL_User:$EMAIL_Pass" --insecure
+	echo -e "Subject: TAUTH Authentication Code\n\n$code" > /tmp/mail.txt
+	curl -sS --url "$EMAIL_Serv" --ssl-reqd --mail-from "$EMAIL_User" --mail-rcpt "$EMAIL" --upload-file /tmp/mail.txt --user "$EMAIL_User:$EMAIL_Pass" --insecure
 	green "Email sent to $EMAIL"
-	rm mail.txt
+	rm /tmp/mail.txt
 elif [ $1 == "sms" ]; then
 	message="message=$code"
 	sent=$(curl -s http://textbelt.com/text -d number=$PHONE -d $message)
