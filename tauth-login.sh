@@ -113,14 +113,17 @@ fi
 
 main_login() {
 read -e -p "Enter Code: " pass
-if [ $pass == $code ]; then
+case $pass in
+    $code ) 
 	green "Accepted Code!"
 	/bin/bash
 	blue "Thank you for using t-auth"
 	exit
-else
+    ;;
+    * )
 	red "Incorrect! Removing from server..."
-fi
+    ;;
+esac
 }
 
 load_user() {
