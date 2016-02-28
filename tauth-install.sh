@@ -29,14 +29,14 @@ if [[ ! -d $TAUTH_CONF_ROOT ]]; then
 fi
 
 echo "Version "$VERSION > $TAUTH_CONF
-echo "#Credentials for gmail account" > $TAUTH_CONF
+echo "#Credentials for gmail account" >> $TAUTH_CONF
 echo "EmailUser "$EMAIL_User >> $TAUTH_CONF
 echo "EmailPass "$EMAIL_Pass >> $TAUTH_CONF
 echo "EmailServer "$EMAIL_Serv >> $TAUTH_CONF
 echo "#Set to yes to force email and remove SMS"  > $TAUTH_CONF
 echo "EmailOnly "$EMAIL_Only >> $TAUTH_CONF
-echo "#Set SmsMethod to 'web' for textbelt message or 'email' for email to text"  > $TAUTH_CONF
-echo "SmsMethod web"  > $TAUTH_CONF
+echo "#Set SmsMethod to 'web' for textbelt message or 'email' for email to text"  >> $TAUTH_CONF
+echo "SmsMethod web"  >> $TAUTH_CONF
 echo "SshConfig "$SSH_CONF >> $TAUTH_CONF
 green "Settings written to $TAUTH_CONF!"
 }
