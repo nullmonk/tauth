@@ -68,7 +68,7 @@ code=$(head /dev/urandom | tr -dc 0-9 | head -c5)
 
 sel() {
 while true; do
-    read -e -p "Choose SMS or EMAIL: " -i "email" method
+    read -e -p "Choose SMS or EMAIL: " -i "sms" method
     case $method in
         "EMAIL" | "email" | "e") 
 		send "email"
@@ -86,12 +86,25 @@ while true; do
 done
 }
 
+get_info() {
+#Gets the hostname from the connection
+SIP=$(echo $SSH_CONNECTION | awk '{print $1}')
+SHOST=$(nslookup $SIP | grep 'name =' | awk '{print $4}')
+SFIN="$SHOST [$SIP]"
+}
+
+log() {
+#log a command with status of $1
+echo "$1"$'\t'"$(date +"%m-%d-%y_%H:%M:%S")"$'\t'"$(whoami)"$'\t'"$SIP"$'\t'"$SHOST" >> /var/log/tauth/tauth.log
+}
+
 #send mode[sms|email]
 send() {
+
 if [ $1 == "email" ]; then
-	echo -e "Subject: TAUTH Authentication Code\n\n$code" > /tmp/mail.txt
+	echo -e "Subject: TAUTH code\n\nCode: $code\nFrom: $SFIN" > /tmp/mail.txt
 	curl -sS --url "$EMAIL_Serv" --ssl-reqd --mail-from "$EMAIL_User" --mail-rcpt "$EMAIL" --upload-file /tmp/mail.txt --user "$EMAIL_User:$EMAIL_Pass" --insecure
-	green "Email sent to $EMAIL"
+	green "Email sent to $(whoami)"
 	rm /tmp/mail.txt
 elif [ $1 == "sms" ]; then
 	message="message=$code"
@@ -116,12 +129,14 @@ read -e -p "Enter Code: " pass
 case $pass in
     $code ) 
 	green "Accepted Code!"
+    log "LOGIN"
 	/bin/bash
 	blue "Thank you for using t-auth"
 	exit
     ;;
     * )
 	red "Incorrect! Removing from server..."
+    log "FAILED"
     ;;
 esac
 }
@@ -153,6 +168,7 @@ fi
 blue "Server secured with TAUTH"
 load_settings
 load_user
+get_info
 
 blue "Please login with authentication code"
 #Select message version and send code
