@@ -15,6 +15,54 @@ if [ $(whoami) != "root" ]; then
 	exit
 fi
 }
+$PhoneInfo="Phoneinfo"
+
+search_carrier(){
+if [[ ! -f $PhoneInfo ]]; then
+red "No carrier database found!"
+exit
+fi
+if [ -z $1 ]; then
+	read -p "Enter phone carrier: " pc
+	searchA=${pc,,}
+else
+	searchA=$1
+	searchA=${searchA,,}
+fi
+resultA=( $(cat $PhoneInfo | cut -d':' -f1 | grep "$searchA") )
+count=$(echo ${#resultA[@]})
+blue "Searching for [$searchA]..."
+if [ $count -lt 1 ]; then
+	red "No results found for [$searchA]"
+	exit
+elif [ $count -eq 1 ]; then
+	green "Match found"
+	PhoneCarrier=$(cat $PhoneInfo | grep "$searchA:" | cut -d':' -f2)
+	green "Carrier set to [$resultA]"
+else
+	red "More then one carrier found!"
+	for i in $(seq 0 $count); do
+		if [ $i -eq $count ]; then
+			red "$count. EXIT"
+		else
+			red "$i. [${resultA[i]}]"
+		fi
+	done
+	
+	re="^[0-9]+$"
+	while true; do
+		read -p "Please choose a number: " choice
+		if [ $choice -eq $count ]; then
+			exit
+		elif [[ $choice =~ $re ]]; then
+			PhoneCarrier=$(cat $PhoneInfo | grep "${resultA[$choice]}:" | cut -d':' -f2 )
+			green "Carrier set to [${resultA[$choice]}]"
+			break
+		fi
+	done
+	exit
+fi
+}
 
 add_user() {
 blue "Adding $1 to tauth"
@@ -40,6 +88,10 @@ if [[ -f $USER_CONF ]]; then
 fi
 #gets user input
 read -p "Enter user's SMS number: " num
+if [[ -f $PhoneInfo ]]; then
+	search_carrier
+	echo "Carrier "$PhoneCarrier > $USER_CONF
+fi
 read -p "Enter user's Email: " em
 echo "Phone "$num > $USER_CONF
 echo "Email "$em >> $USER_CONF
@@ -87,6 +139,24 @@ if [[ -d $USER_DIR ]]; then
 	rmdir $USER_DIR
 fi
 green "$1 removed from tauth"
+}
+
+uninstall(){
+users_a=( $(ls -1 /home) )
+for i in users_a; do
+	if [[ -f "$i/.tauth" ]]; then
+		remove_user $i
+	fi
+done
+if [[ -d "/etc/tauth" ]]; then
+	rm -rf "/etc/tauth"
+	green "Removed /etc/tauth"
+fi
+if [[ -d "/usr/local/tauth" ]]; then
+	rm -rf "/usr/local/tauth"
+	green "Removed /usr/local/tauth"
+fi
+
 }
 nm=$(basename $0)
 case $1 in
