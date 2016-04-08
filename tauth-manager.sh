@@ -157,6 +157,8 @@ if [[ -d "/usr/local/tauth" ]]; then
 	green "Removed /usr/local/tauth"
 fi
 
+cat /etc/ssh/sshd_config.bac >> /etc/ssh/sshd_config
+
 }
 nm=$(basename $0)
 case $1 in
