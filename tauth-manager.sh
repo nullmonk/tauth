@@ -172,6 +172,16 @@ case $1 in
 		check_root
         	remove_user $2
         	;;
+	uninstall)
+		while true; do
+    			read -p "Do you wish to uninstall? [Y/n] " yn
+    				case $yn in
+        			[Yy]* ) break;;
+        			* ) exit;;
+    			esac
+		done
+		check_root
+		uninstall
 	version)
         	echo "TAUTH v${VERSION}"
         	exit 0
@@ -190,6 +200,8 @@ Available commands:
     remove
 	Removes tauth from a users account
 	$nm remove [USER]
+    uninstall
+	Uninstalls tauth from the computer and all users
     version
         prints the tauth version
 __EOF__

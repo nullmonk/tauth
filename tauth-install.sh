@@ -20,13 +20,13 @@ green() { CGREEN='\033[0;32m'; echo -e ${CGREEN}$1${NOCOLOR}; }
 ifdir() {
 if [[ ! -d $1 ]]; then
 	mkdir -p $1
+else
+	rm -fr $1
 fi
 }
 
 write_settings() {
-if [[ ! -d $TAUTH_CONF_ROOT ]]; then
-	mkdir -p $TAUTH_CONF_ROOT
-fi
+ifdir $TAUTH_CONF_ROOT
 
 echo "Version "$VERSION > $TAUTH_CONF
 echo "#Credentials for gmail account" >> $TAUTH_CONF
@@ -80,6 +80,9 @@ chmod +x $TAUTH_ROOT/tauth-login.sh
 #make sym link to tauth manager
 if [[ ! -f /usr/local/sbin/TAUTH ]]; then
 	ln -s "$TAUTH_ROOT/tauth-manager.sh" "/usr/local/sbin/TAUTH"
+else
+	rm /usr/local/sbin/TAUTH
+	ln -s "$TAUTH_ROOT/tauth-manager.sh" "/usr/local/sbin/TAUTH"
 fi
 #read user input and write it to config file
 read -p "Enter Gmail address: " EMAIL_User
@@ -91,7 +94,9 @@ cp $SSH_CONF "$SSH_CONF.bac"
 echo "ForceCommand $TAUTH_ROOT/tauth-login.sh" >> $SSH_CONF
 echo
 #create default log file
-echo "STATUS"$'\t'"TIME"$'\t'"USER"$'\t'"IP"$'\t'"HOSTNAME" >> /var/log/tauth/tauth.log
+logs="/var/log/tauth/tauth.log"
+touch $logs
+echo "STATUS"$'\t'"TIME"$'\t'"USER"$'\t'"IP"$'\t'"HOSTNAME" >> $logs
 green "Install Successfull!"
 green "Please restart SSH server"
 }
