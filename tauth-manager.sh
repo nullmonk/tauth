@@ -156,7 +156,7 @@ if [[ -d "/usr/local/tauth" ]]; then
 	green "Removed /usr/local/tauth"
 fi
 
-cat /etc/ssh/sshd_config.bac >> /etc/ssh/sshd_config
+cat /etc/ssh/sshd_config.bac > /etc/ssh/sshd_config
 
 if [[ -f "/usr/local/sbin/tauth" ]]; then
 rm "/usr/local/sbin/tauth"
