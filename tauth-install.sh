@@ -95,9 +95,8 @@ cp $SSH_CONF "$SSH_CONF.bac"
 echo "ForceCommand $TAUTH_ROOT/tauth-login.sh" >> $SSH_CONF
 echo
 #create default log file
-ifdir "/var/log/tauth"
+ifdir /var/log/tauth
 logs="/var/log/tauth/tauth.log"
-touch $logs
 echo "STATUS"$'\t'"TIME"$'\t'"USER"$'\t'"IP"$'\t'"HOSTNAME" >> $logs
 green "Install Successfull!"
 green "Please restart SSH server"
