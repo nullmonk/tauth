@@ -121,13 +121,12 @@ fi
 }
 
 remove_user() {
-blue "Removing $1 from tauth"
 USER_CONF="/home/$1/.tauth/user_config"
 USER_DIR="/home/$1/.tauth"
 #check if user has home directory
 #if so removes .tauth and .tauth/user_config
 if [[ ! -d /home/$1 ]]; then
-	red "User does not exist or has no home directory!"
+	red "$1 does not exist or has no home directory!"
 fi
 
 if [[ -f $USER_CONF ]]; then
@@ -158,6 +157,9 @@ fi
 
 cat /etc/ssh/sshd_config.bac >> /etc/ssh/sshd_config
 
+if [[ -f "/usr/sbin/tauth" ]]; then
+rm "/usr/sbin/tauth"
+fi
 }
 nm=$(basename $0)
 case $1 in

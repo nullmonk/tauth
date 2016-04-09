@@ -75,6 +75,7 @@ install_tauth() {
 ifdir $TAUTH_ROOT
 curl -sS $GITHUB_LOCATION/tauth-login.sh >> $TAUTH_ROOT/tauth-login.sh
 curl -sS $GITHUB_LOCATION/tauth-manager.sh >> $TAUTH_ROOT/tauth-manager.sh
+echo "step 1"
 #make programs executable
 chmod +x $TAUTH_ROOT/tauth-manager.sh
 chmod +x $TAUTH_ROOT/tauth-login.sh
@@ -85,10 +86,12 @@ else
 	rm /usr/local/sbin/TAUTH
 	ln -s "$TAUTH_ROOT/tauth-manager.sh" "/usr/local/sbin/tauth"
 fi
+echo "step 2"
 #read user input and write it to config file
 read -p "Enter Gmail address: " EMAIL_User
 read -p "Enter Gmail password: " -s EMAIL_Pass
 write_settings
+echo "step 3"
 #back up ssh data and append tauth line
 cp $SSH_CONF "$SSH_CONF.bac"
 echo "ForceCommand $TAUTH_ROOT/tauth-login.sh" >> $SSH_CONF
