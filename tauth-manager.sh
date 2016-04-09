@@ -3,6 +3,7 @@
 VERSION="1.3"
 #Colors for display
 NOCOLOR='\033[0m'
+TAUTHROOT="/usr/local/tauth"
 red() { CRED='\033[0;31m'; echo -e ${CRED}$1${NOCOLOR}; }
 blue() { CBLUE='\033[0;34m'; echo -e ${CBLUE}$1${NOCOLOR}; }
 green() { CGREEN='\033[0;32m'; echo -e ${CGREEN}$1${NOCOLOR}; }
@@ -15,7 +16,7 @@ if [ $(whoami) != "root" ]; then
 	exit
 fi
 }
-PhoneInfo="Phoneinfo"
+PhoneInfo="$TAUTHROOT/Phoneinfo"
 
 search_carrier(){
 if [[ ! -f $PhoneInfo ]]; then
