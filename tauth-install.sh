@@ -2,8 +2,8 @@
 
 VERSION="0.1.0"
 SSH_CONF=""
-EMAIL_User=""
-EMAIL_Pass=""
+#EMAIL_User=""
+#EMAIL_Pass=""
 EMAIL_Serv="smtps://smtp.gmail.com:465"
 EMAIL_Only="No"
 TAUTH_CONF_ROOT="/etc/tauth"
@@ -80,10 +80,10 @@ echo "step 1"
 chmod +x $TAUTH_ROOT/tauth-manager.sh
 chmod +x $TAUTH_ROOT/tauth-login.sh
 #make sym link to tauth manager
-if [[ ! -f /usr/local/sbin/TAUTH ]]; then
+if [[ ! -f /usr/local/sbin/tauth ]]; then
 	ln -s "$TAUTH_ROOT/tauth-manager.sh" "/usr/local/sbin/tauth"
 else
-	rm /usr/local/sbin/TAUTH
+	rm /usr/local/sbin/tauth
 	ln -s "$TAUTH_ROOT/tauth-manager.sh" "/usr/local/sbin/tauth"
 fi
 echo "step 2"

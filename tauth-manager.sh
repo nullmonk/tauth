@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="1.0"
+VERSION="1.3"
 #Colors for display
 NOCOLOR='\033[0m'
 red() { CRED='\033[0;31m'; echo -e ${CRED}$1${NOCOLOR}; }
@@ -157,8 +157,8 @@ fi
 
 cat /etc/ssh/sshd_config.bac >> /etc/ssh/sshd_config
 
-if [[ -f "/usr/sbin/tauth" ]]; then
-rm "/usr/sbin/tauth"
+if [[ -f "/usr/local/sbin/tauth" ]]; then
+rm "/usr/local/sbin/tauth"
 fi
 }
 nm=$(basename $0)
