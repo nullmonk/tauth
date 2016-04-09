@@ -35,7 +35,6 @@ count=$(echo ${#resultA[@]})
 blue "Searching for [$searchA]..."
 if [ $count -lt 1 ]; then
 	red "No results found for [$searchA]"
-	exit
 elif [ $count -eq 1 ]; then
 	green "Match found"
 	PhoneCarrier=$(cat $PhoneInfo | grep "$searchA:" | cut -d':' -f2)
@@ -61,7 +60,6 @@ else
 			break
 		fi
 	done
-	exit
 fi
 }
 
@@ -82,8 +80,8 @@ fi
 if [[ -f $USER_CONF ]]; then
 	#print out previous user data
 	blue "User has previous tauth data:"
-	prev_email=$(echo $(cat $USER_CONF | grep Email | awk '{print $2}'))
-	prev_phone=$(echo $(cat $USER_CONF | grep Phone | awk '{print $2}'))
+	prev_email=$(echo $(cat $USER_CONF | grep "Email " | awk '{print $2}'))
+	prev_phone=$(echo $(cat $USER_CONF | grep "Phone " | awk '{print $2}'))
 	blue "[ Email: $prev_email ] [ Phone: $prev_phone ]"
 	chattr -i $USER_CONF
 fi
@@ -113,8 +111,8 @@ fi
 if [[ -f $USER_CONF ]]; then
 	#print out previous user data
 	blue "$1's tauth data:"
-	prev_email=$(echo $(cat $USER_CONF | grep Email | awk '{print $2}'))
-	prev_phone=$(echo $(cat $USER_CONF | grep Phone | awk '{print $2}'))
+	prev_email=$(echo $(cat $USER_CONF | grep "Email " | awk '{print $2}'))
+	prev_phone=$(echo $(cat $USER_CONF | grep "Phone " | awk '{print $2}'))
 	blue "[ Email: $prev_email ] [ Phone: $prev_phone ]"
 else
 	red "User is not registered with TAUTH!"
