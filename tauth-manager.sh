@@ -15,7 +15,7 @@ if [ $(whoami) != "root" ]; then
 	exit
 fi
 }
-$PhoneInfo="Phoneinfo"
+PhoneInfo="Phoneinfo"
 
 search_carrier(){
 if [[ ! -f $PhoneInfo ]]; then
@@ -184,6 +184,8 @@ case $1 in
 		done
 		check_root
 		uninstall
+		exit 0
+		;;
 	version)
         	echo "TAUTH v${VERSION}"
         	exit 0
