@@ -80,20 +80,18 @@ chmod +x $TAUTH_ROOT/tauth-manager.sh
 chmod +x $TAUTH_ROOT/tauth-login.sh
 #make sym link to tauth manager
 if [[ ! -f /usr/local/sbin/TAUTH ]]; then
-	ln -s "$TAUTH_ROOT/tauth-manager.sh" "/usr/local/sbin/TAUTH"
+	ln -s "$TAUTH_ROOT/tauth-manager.sh" "/usr/local/sbin/tauth"
 else
 	rm /usr/local/sbin/TAUTH
-	ln -s "$TAUTH_ROOT/tauth-manager.sh" "/usr/local/sbin/TAUTH"
+	ln -s "$TAUTH_ROOT/tauth-manager.sh" "/usr/local/sbin/tauth"
 fi
 #read user input and write it to config file
 read -p "Enter Gmail address: " EMAIL_User
 read -p "Enter Gmail password: " -s EMAIL_Pass
-echo 
 write_settings
 #back up ssh data and append tauth line
 cp $SSH_CONF "$SSH_CONF.bac"
 echo "ForceCommand $TAUTH_ROOT/tauth-login.sh" >> $SSH_CONF
-echo
 #create default log file
 ifdir /var/log/tauth
 logs="/var/log/tauth/tauth.log"

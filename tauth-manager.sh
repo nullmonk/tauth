@@ -128,7 +128,6 @@ USER_DIR="/home/$1/.tauth"
 #if so removes .tauth and .tauth/user_config
 if [[ ! -d /home/$1 ]]; then
 	red "User does not exist or has no home directory!"
-	exit
 fi
 
 if [[ -f $USER_CONF ]]; then
@@ -137,14 +136,14 @@ if [[ -f $USER_CONF ]]; then
 fi
 if [[ -d $USER_DIR ]]; then
 	rmdir $USER_DIR
+	green "$1 removed from tauth"
 fi
-green "$1 removed from tauth"
 }
 
 uninstall(){
 users_a=( $(ls -1 /home) )
-for i in users_a; do
-	if [[ -f "$i/.tauth" ]]; then
+for i in ${users_a[@]}; do
+	if [[ -d "/home/$i/.tauth" ]]; then
 		remove_user $i
 	fi
 done
