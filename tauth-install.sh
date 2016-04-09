@@ -22,6 +22,7 @@ if [[ ! -d $1 ]]; then
 	mkdir -p $1
 else
 	rm -fr $1
+	mkdir -p $1
 fi
 }
 
