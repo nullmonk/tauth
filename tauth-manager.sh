@@ -89,11 +89,11 @@ fi
 read -p "Enter user's SMS number: " num
 if [[ -f $PhoneInfo ]]; then
 	search_carrier
-	echo "Carrier "$PhoneCarrier > $USER_CONF
 fi
 read -p "Enter user's Email: " em
 echo "Phone "$num > $USER_CONF
 echo "Email "$em >> $USER_CONF
+echo "Carrier "$PhoneCarrier > $USER_CONF
 #echo $1 >> $USERS
 chattr +i $USER_CONF
 green $1" added to tauth!"
