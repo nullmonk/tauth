@@ -39,6 +39,7 @@ echo "EmailOnly "$EMAIL_Only >> $TAUTH_CONF
 echo "#Set SmsMethod to 'web' for textbelt message or 'email' for email to text"  >> $TAUTH_CONF
 echo "SmsMethod web"  >> $TAUTH_CONF
 echo "SshConfig "$SSH_CONF >> $TAUTH_CONF
+echo "Log $logs" >> $TAUTH_CONF
 green "Settings written to $TAUTH_CONF!"
 }
 
@@ -89,7 +90,6 @@ fi
 #read user input and write it to config file
 read -p "Enter Gmail address: " EMAIL_User
 read -p "Enter Gmail password: " -s EMAIL_Pass
-write_settings
 #back up ssh data and append tauth line
 cp $SSH_CONF "$SSH_CONF.bac"
 echo "ForceCommand $TAUTH_ROOT/tauth-login.sh" > $SSH_CONF
@@ -97,6 +97,9 @@ echo "ForceCommand $TAUTH_ROOT/tauth-login.sh" > $SSH_CONF
 ifdir /var/log/tauth
 logs="/var/log/tauth/tauth.log"
 echo "STATUS"$'\t'"TIME"$'\t'"USER"$'\t'"IP"$'\t'"HOSTNAME" >> $logs
+chmod 666 $logs
+chattr +a $logs
+write_settings
 green "Install Successfull!"
 green "Please restart SSH server"
 }

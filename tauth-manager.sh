@@ -37,7 +37,7 @@ if [ $count -lt 1 ]; then
 	red "No results found for [$searchA]"
 elif [ $count -eq 1 ]; then
 	green "Match found"
-	PhoneCarrier=$(cat $PhoneInfo | grep "$searchA:" | cut -d':' -f2)
+	PhoneCarrier=$(cat $PhoneInfo | grep "$resultA:" | cut -d':' -f2)
 	green "Carrier set to [$resultA]"
 else
 	red "More then one carrier found!"
@@ -93,7 +93,7 @@ fi
 read -p "Enter user's Email: " em
 echo "Phone "$num > $USER_CONF
 echo "Email "$em >> $USER_CONF
-echo "Carrier "$PhoneCarrier > $USER_CONF
+echo "Carrier "$PhoneCarrier >> $USER_CONF
 #echo $1 >> $USERS
 chattr +i $USER_CONF
 green $1" added to tauth!"
