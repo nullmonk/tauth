@@ -48,9 +48,12 @@ if [[ -f $TAUTH_CONF ]]; then
 	EMAIL_User=$(cat $TAUTH_CONF | grep EmailUser | awk '{print $2}')
 	EMAIL_Pass=$(cat $TAUTH_CONF | grep EmailPass | awk '{print $2}')
 	EMAIL_Serv=$(cat $TAUTH_CONF | grep EmailServer | awk '{print $2}')
-	EMAIL_Only=$(cat $TAUTH_CONF | grep EmailOnly | awk '{print $2}')
-    	EMAIL_Only=${EMAIL_Only,,}
-	SSH_CONF=$(cat $TAUTH_CONF | grep SshConfig | awk '{print $2}')
+	ALLOW_EMAIL=$(cat $TAUTH_CONF | grep AllowEmail | awk '{print $2}')
+    	ALLOW_EMAIL=${EMAIL_Only,,}
+	ALLOW_SMS=$(cat $TAUTH_CONF | grep AllowSMS | awk '{print $2}')
+    	ALLOW_SMS=${EMAIL_Only,,}
+	PHONEINFO=$(cat $TAUTH_CONF | grep PhoneCarrier | awk '{print $2}')
+	LOG=$(cat $TAUTH_CONF | grep AllowEmail | awk '{print $2}')
 #	if [ $SSH_CONF == "" | $EMAIL_Only == "" ]; then
 #		red "Configuration file errors!"
 #		red "SshConfig missing or EmailOnly missing"
@@ -95,7 +98,7 @@ SFIN="$SHOST [$SIP]"
 
 log() {
 #log a command with status of $1
-echo "$1"$'\t'"$(date +"%m-%d-%y_%H:%M:%S")"$'\t'"$(whoami)"$'\t'"$SIP"$'\t'"$SHOST" >> /var/log/tauth/tauth.log
+echo "$1"$'\t'"$(date +"%m-%d-%y_%H:%M:%S")"$'\t'"$(whoami)"$'\t'"$SIP"$'\t'"$SHOST" >> $LOG
 }
 
 #send mode[sms|email]
@@ -150,6 +153,7 @@ USER_DIR="/home/$USER/.tauth"
 if [[ -f $USER_CONF ]]; then
 	EMAIL=$(cat $USER_CONF | grep "Email " | awk '{print $2}')
 	PHONE=$(cat $USER_CONF | grep "Phone " | awk '{print $2}')
+	CARRIER=$(cat $USER_CONF | grep "Carrier " | awk '{print $2}')
 else
 	tauth_login $code
 fi
