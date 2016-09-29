@@ -102,6 +102,7 @@ SFIN="$SHOST [$SIP]"
 log() {
 #log a command with status of $1
 #echo "$1"$'\t'"$(date +"%m-%d-%y_%H:%M:%S")"$'\t'"$(whoami)"$'\t'"$SIP"$'\t'"$SHOST" >> $LOG
+echo "A function cannot be empty" > /dev/null
 }
 
 #send mode[ssms|sms|email]
