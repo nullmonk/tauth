@@ -1,4 +1,5 @@
 #!/bin/bash
+# Author Micah Martin - Knif3
 
 VERSION="1.0"
 TAUTH_CONF_ROOT="/etc/tauth"
@@ -49,9 +50,9 @@ if [[ -f $TAUTH_CONF ]]; then
 	EMAIL_Pass=$(cat $TAUTH_CONF | grep EmailPass | awk '{print $2}')
 	EMAIL_Serv=$(cat $TAUTH_CONF | grep EmailServer | awk '{print $2}')
 	ALLOW_EMAIL=$(cat $TAUTH_CONF | grep AllowEmail | awk '{print $2}')
-    	ALLOW_EMAIL=${EMAIL_Only,,}
+    	ALLOW_EMAIL=${ALLOW_EMAIL,,}
 	ALLOW_SMS=$(cat $TAUTH_CONF | grep AllowSMS | awk '{print $2}')
-    	ALLOW_SMS=${EMAIL_Only,,}
+    	ALLOW_SMS=${ALLOW_SMS,,}
 	PHONEINFO=$(cat $TAUTH_CONF | grep PhoneCarrier | awk '{print $2}')
 	LOG=$(cat $TAUTH_CONF | grep AllowEmail | awk '{print $2}')
 #	if [ $SSH_CONF == "" | $EMAIL_Only == "" ]; then
@@ -77,11 +78,13 @@ while true; do
 		send "email"
 		break;;
         "sms" | "SMS" | "s" )
-		if [ "$EMAIL_Only" = "yes" ]; then
-			red "No SMS service! Sending email..."
-			send "email"
+		if [ "$ALLOW_SMS" == "web" ]; then
+		    send "sms"
+		elif [ "$ALLOW_SMS" == "email" ]; then
+		    send "ssms"
 		else
-			send "sms"
+		    red "No SMS service! Sending email..."
+		    send "email"
 		fi
 		break;;
         * ) echo "Please choose SMS or EMAIL";;
@@ -98,10 +101,10 @@ SFIN="$SHOST [$SIP]"
 
 log() {
 #log a command with status of $1
-echo "$1"$'\t'"$(date +"%m-%d-%y_%H:%M:%S")"$'\t'"$(whoami)"$'\t'"$SIP"$'\t'"$SHOST" >> $LOG
+#echo "$1"$'\t'"$(date +"%m-%d-%y_%H:%M:%S")"$'\t'"$(whoami)"$'\t'"$SIP"$'\t'"$SHOST" >> $LOG
 }
 
-#send mode[sms|email]
+#send mode[ssms|sms|email]
 send() {
 
 if [ $1 == "email" ]; then
@@ -120,6 +123,12 @@ elif [ $1 == "sms" ]; then
 		red "Sending code failed!! Restart to try Email"
 		exit
 	fi
+# secure sms setup with email to text
+elif [ $1 == "ssms" ]; then
+	echo -e "Subject: TAUTH code\n\nCode: $code\nFrom: $SFIN" > /tmp/mail.txt
+	curl -sS --url "$EMAIL_Serv" --ssl-reqd --mail-from "$EMAIL_User" --mail-rcpt "$PHONE$CARRIER" --upload-file /tmp/mail.txt --user "$EMAIL_User:$EMAIL_Pass" --insecure
+	green "Text sent to $(whoami)"
+	rm /tmp/mail.txt
 else
 	red "No email to text service!"
 	exit
@@ -161,8 +170,10 @@ fi
 
 tauth_login() {
 if [ $1 == $code ]; then
-	/bin/bash
-	blue "Thank you for using t-auth"	
+	# /bin/bash
+	# testing users preffered shell
+	$(getent passwd $USER | cut -d: -f7)
+	blue "Thank you for using tauth"	
 	exit
 else
 	red "Incorrect! Removing from server..."

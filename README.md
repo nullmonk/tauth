@@ -21,14 +21,14 @@ After installation restart your SSH server
 
 After installing TAUTH, all management is handled with
 
-	$ TAUTH [command]
+	$ tauth [command]
 
 To enable TAUTH for a user
 
-	$ TAUTH add [user]
+	$ tauth add [user]
 
 To remove TAUTH from a specific user
 
-	$ TAUTH remove [user]
+	$ tauth remove [user]
 
 Note: You can manually remove a user from TAUTH by removing "/home/user/.tauth",However "/home/user/.tauth/user_config" is marked as immutable

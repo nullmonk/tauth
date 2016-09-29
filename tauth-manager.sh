@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="1.3"
+VERSION="1.4"
 #Colors for display
 NOCOLOR='\033[0m'
 TAUTHROOT="/usr/local/tauth"

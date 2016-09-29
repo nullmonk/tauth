@@ -5,8 +5,9 @@ EmailServer smtps://smtp.gmail.com:465
 #Whether or not to allow email. Set to yes or no
 AllowEmail yes
 #Whether or not to allow sms. Set to 'no' 'web' or 'email'. Web is insecure if the network that the server is on can be sniffed, However, this does not require Phone Carriers
-AllowSMS web
+AllowSMS email
 #location of the phone carrier information file
 Phoneinfo /etc/tauth/Phoneinfo
 #Location of the log file
-Log /var/log/tauth/tauth.log
+#Log /var/log/tauth/tauth.log
+#Logging disabled for now

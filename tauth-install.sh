@@ -16,7 +16,7 @@ EMAIL_User=""
 EMAIL_Pass=""
 EMAIL_Serv="smtps://smtp.gmail.com:465"
 AllowEmail="yes"
-AllowSMS="web"
+AllowSMS="email"
 PhoneCarrier="$TAUTH_ROOT/Phoneinfo"
 logs="$TAUTH_CONF_ROOT/tauth.log"
 
@@ -48,8 +48,8 @@ echo "#Whether or not to allow sms. Set to 'no' 'web' or 'email'. Web is insecur
 echo "AllowSMS $AllowSMS"  >> $TAUTH_CONF
 echo "#location of the phone carrier information file" >> $TAUTH_CONF
 echo "PhoneCarrier $PhoneCarrier"  >> $TAUTH_CONF
-echo "#Location of the log file" >> $TAUTH_CONF
-echo "Log $logs" >> $TAUTH_CONF
+#echo "#Location of the log file" >> $TAUTH_CONF
+#echo "Log $logs" >> $TAUTH_CONF
 green "Settings written to $TAUTH_CONF!"
 }
 
@@ -105,9 +105,9 @@ read -p "Enter Gmail password: " -s EMAIL_Pass
 cp $SSH_CONF "$SSH_CONF.bac"
 echo "ForceCommand $TAUTH_ROOT/tauth-login.sh" >> $SSH_CONF
 #create default log file
-echo "STATUS"$'\t'"TIME"$'\t'"USER"$'\t'"IP"$'\t'"HOSTNAME" >> $logs
-chmod 666 $logs
-chattr +a $logs
+#echo "STATUS"$'\t'"TIME"$'\t'"USER"$'\t'"IP"$'\t'"HOSTNAME" >> $logs
+#chmod 666 $logs
+#chattr +a $logs
 write_settings
 green "Install Successfull!"
 green "Please restart SSH server"
