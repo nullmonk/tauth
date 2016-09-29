@@ -144,7 +144,7 @@ case $pass in
 	green "Accepted Code!"
     log "LOGIN"
 	/bin/bash
-	blue "Thank you for using t-auth"
+	blue "Thank you for using tauth"
 	exit
     ;;
     * )
