@@ -68,7 +68,8 @@ fi
 
 
 
-code=$(head /dev/urandom | tr -dc 0-9 | head -c5)
+value=$(head /dev/urandom | tr -dc 0-9 | head -c6)
+code="T-$value"
 
 sel() {
 while true; do
@@ -142,13 +143,13 @@ fi
 }
 
 main_login() {
-read -e -t 60 -p "Enter Code: " pass
+read -e -t 60 -p "Enter Code: T-" pass
 if [ "$?" != "0" ]; then
     red "\nTimeout exceded";
     exit
 fi
 case $pass in
-    $code ) 
+    $value ) 
 	green "Accepted Code!"
     log "LOGIN"
 	/bin/bash
