@@ -159,7 +159,7 @@ fi
 }
 
 [ "$BANNER" != "" ] && blue "$BANNER";
-INIT
+INIT_TAUTH
 load_settings
 load_user
 
