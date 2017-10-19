@@ -1,10 +1,21 @@
 #!/bin/bash
 # Author Micah Martin - Knif3
 
-VERSION="1.0"
-TAUTH_CONF_ROOT="/etc/tauth"
-TAUTH_CONF=$TAUTH_CONF_ROOT/"tauth_config"
-TAUTH_ROOT="/usr/local/tauth"
+INIT_TAUTH() {
+    # VERSION INFO
+    VERSION="1.1"
+    TAUTH_CONF_ROOT="/etc/tauth"
+    TAUTH_CONF=$TAUTH_CONF_ROOT/"tauth_config"
+    TAUTH_ROOT="/usr/local/tauth"
+    # GET THE SOURCE HOSTNAME AND IP
+    SIP=$(echo $SSH_CONNECTION | awk '{print $1}')
+    if [ "$SIP" != "" ]; then
+	$SHOST=$(getent hosts $SIP |awk '{print $NF}')
+    fi
+    [ "$SIP" = "" ] && SIP="UNKNOWN-IP"; 
+    [ "$SHOST" = "" ] && SHOST="UNKNOWN-HOSTNAME"; 
+    SFIN="$SHOST [$SIP]"
+}
 
 #Colors for display
 NOCOLOR='\033[0m'
@@ -67,16 +78,6 @@ while true; do
 done
 }
 
-get_info() {
-#Gets the hostname from the connection
-SIP=$(echo $SSH_CONNECTION | awk '{print $1}')
-if [ "$(command -v nslookup)" != "" ]; then
-    SHOST=$(nslookup $SIP | grep 'name =' | awk '{print $4}')
-else
-    SHOST="Unknown"
-fi
-SFIN="$SHOST [$SIP]"
-}
 
 log() {
 #log a command with status of $1
@@ -158,9 +159,9 @@ fi
 }
 
 [ "$BANNER" != "" ] && blue "$BANNER";
+INIT
 load_settings
 load_user
-get_info
 
 blue "Please login with authentication code"
 #Select message version and send code
