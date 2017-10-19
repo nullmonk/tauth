@@ -74,6 +74,10 @@ code="T-$value"
 sel() {
 while true; do
     read -e -p "Choose SMS or EMAIL: " -i "sms" method
+    if [ "$?" != "0" ]; then
+	red "\nTimeout exceeded";
+	exit
+    fi
     case $method in
         "EMAIL" | "email" | "e") 
 		send "email"
@@ -145,7 +149,7 @@ fi
 main_login() {
 read -e -t 60 -p "Enter Code: T-" pass
 if [ "$?" != "0" ]; then
-    red "\nTimeout exceded";
+    red "\nTimeout exceeded";
     exit
 fi
 case $pass in
