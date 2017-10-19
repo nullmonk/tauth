@@ -63,9 +63,9 @@ fi
 
 # Check dependencies
 missing=""
-command -v curl;
+command -v curl 2>/dev/null >/dev/null;
 [ "$?" != "0" ] && missing="$missing\n\tcurl"
-command -v sshd;
+command -v sshd 2>/dev/null >/dev/null;
 [ "$?" != "0" ] && missing="$missing\n\tsshd"
 
 if [ "$missing" != "" ]; then
@@ -113,6 +113,7 @@ fi
 #read user input and write it to config file
 read -p "Enter Gmail address: " EMAIL_User
 read -p "Enter Gmail password: " -s EMAIL_Pass
+echo
 #back up ssh data and append tauth line
 cp $SSH_CONF "$SSH_CONF.bac"
 echo "ForceCommand $TAUTH_ROOT/tauth-login.sh" >> $SSH_CONF
