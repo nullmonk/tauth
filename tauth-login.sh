@@ -12,38 +12,6 @@ red() { CRED='\033[0;31m'; echo -e ${CRED}$1${NOCOLOR}; }
 blue() { CBLUE='\033[0;36m'; echo -e ${CBLUE}$1${NOCOLOR}; }
 green() { CGREEN='\033[0;32m'; echo -e ${CGREEN}$1${NOCOLOR}; }
 
-
-
-
-check_ssh() {
-#find SSH config file
-if [[ -f /etc/ssh/sshd_config ]]; then
-	SSH_CONF="/etc/ssh/sshd_config"
-	#green "SSH config file found at "$SSH_CONF
-	
-else
-	red "No SSH config found in /etc/ssh/sshd_config"
-	read -p "Enter location of SSH config file: " loc
-	if [[ -f $loc ]]; then
-		SSH_CONF=$loc
-		green "SSH config file found at "$SSH_CONF
-	else
-		red "No SSH config found in "$loc
-		red "Exiting...."
-	fi
-fi
-}
-
-
-check_root() {
-#check root
-if [ $(whoami) != "root" ]; then
-	red "restart as root!"
-	red "Exiting...."
-	exit
-fi
-}
-
 load_settings() {
 if [[ -f $TAUTH_CONF ]]; then
 	EMAIL_User=$(cat $TAUTH_CONF | grep EmailUser | awk '{print $2}')
@@ -54,7 +22,9 @@ if [[ -f $TAUTH_CONF ]]; then
 	ALLOW_SMS=$(cat $TAUTH_CONF | grep AllowSMS | awk '{print $2}')
     	ALLOW_SMS=${ALLOW_SMS,,}
 	PHONEINFO=$(cat $TAUTH_CONF | grep PhoneCarrier | awk '{print $2}')
-	LOG=$(cat $TAUTH_CONF | grep AllowEmail | awk '{print $2}')
+	BANNER=$(cat $TAUTH_CONF | grep Banner | awk '{print $2}')
+	
+	# LOG=$(cat $TAUTH_CONF | grep AllowEmail | awk '{print $2}')
 #	if [ $SSH_CONF == "" | $EMAIL_Only == "" ]; then
 #		red "Configuration file errors!"
 #		red "SshConfig missing or EmailOnly missing"
@@ -111,7 +81,7 @@ SFIN="$SHOST [$SIP]"
 log() {
 #log a command with status of $1
 #echo "$1"$'\t'"$(date +"%m-%d-%y_%H:%M:%S")"$'\t'"$(whoami)"$'\t'"$SIP"$'\t'"$SHOST" >> $LOG
-echo "A function cannot be empty" > /dev/null
+:
 }
 
 #send mode[ssms|sms|email]
@@ -156,7 +126,7 @@ case $pass in
     $value ) 
 	green "Accepted Code!"
     log "LOGIN"
-	/bin/bash
+	$USER_SHELL
 	blue "Thank you for using tauth"
 	exit
     ;;
@@ -177,24 +147,17 @@ if [[ -f $USER_CONF ]]; then
 	EMAIL=$(cat $USER_CONF | grep "Email " | awk '{print $2}')
 	PHONE=$(cat $USER_CONF | grep "Phone " | awk '{print $2}')
 	CARRIER=$(cat $USER_CONF | grep "Carrier " | awk '{print $2}')
+	USER_SHELL=$(getent passwd $USER | cut -d: -f7)
 else
-	tauth_login $code
-fi
-}
-
-tauth_login() {
-if [ $1 == $code ]; then
-	# /bin/bash
-	# testing users preffered shell
-	$(getent passwd $USER | cut -d: -f7)
-	blue "Thank you for using tauth"	
+	# Default action for non-tauth users
+	# Uncomment the following line to let them login as normal
+	# $USER_SHELL
+	red "Not a tauth user! Removing from server..."
 	exit
-else
-	red "Incorrect! Removing from server..."
 fi
 }
 
-# blue "Server secured with TAUTH"
+[ "$BANNER" != "" ] && blue "$BANNER";
 load_settings
 load_user
 get_info
