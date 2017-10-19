@@ -65,9 +65,12 @@ fi
 missing=""
 command -v curl;
 [ "$?" != "0" ] && missing="$missing\n\tcurl"
+command -v sshd;
+[ "$?" != "0" ] && missing="$missing\n\tsshd"
 
 if [ "$missing" != "" ]; then
     red "Install the following dependencies:$missing";
+    exit
 fi
 }
 
