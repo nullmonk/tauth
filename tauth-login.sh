@@ -142,7 +142,11 @@ fi
 }
 
 main_login() {
-read -e -p "Enter Code: " pass
+read -e -t 60 -p "Enter Code: " pass
+if [ "$?" != "0" ]; then
+    red "\nTimeout exceded";
+    exit
+fi
 case $pass in
     $code ) 
 	green "Accepted Code!"
