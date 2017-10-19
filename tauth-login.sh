@@ -95,7 +95,11 @@ done
 get_info() {
 #Gets the hostname from the connection
 SIP=$(echo $SSH_CONNECTION | awk '{print $1}')
-SHOST=$(nslookup $SIP | grep 'name =' | awk '{print $4}')
+if [ "$(command -v nslookup)" != "" ]; then
+    SHOST=$(nslookup $SIP | grep 'name =' | awk '{print $4}')
+else
+    SHOST="Unknown"
+fi
 SFIN="$SHOST [$SIP]"
 }
 

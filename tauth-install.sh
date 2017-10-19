@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="0.1.0"
+VERSION="0.1.1"
 
 
 SSH_CONF=""
@@ -59,6 +59,15 @@ if [ $(whoami) != "root" ]; then
 	red "restart as root!"
 	red "Exiting...."
 	exit
+fi
+
+# Check dependencies
+missing=""
+command -v curl;
+[ "$?" != "0" ] && missing="$missing\n\tcurl"
+
+if [ "$missing" != "" ]; then
+    red "Install the following dependencies:$missing";
 fi
 }
 
