@@ -9,7 +9,7 @@ TAUTH_ROOT="/usr/local/tauth"
 #Colors for display
 NOCOLOR='\033[0m'
 red() { CRED='\033[0;31m'; echo -e ${CRED}$1${NOCOLOR}; }
-blue() { CBLUE='\033[0;34m'; echo -e ${CBLUE}$1${NOCOLOR}; }
+blue() { CBLUE='\033[0;36m'; echo -e ${CBLUE}$1${NOCOLOR}; }
 green() { CGREEN='\033[0;32m'; echo -e ${CGREEN}$1${NOCOLOR}; }
 
 
@@ -189,7 +189,7 @@ else
 fi
 }
 
-blue "Server secured with TAUTH"
+# blue "Server secured with TAUTH"
 load_settings
 load_user
 get_info
