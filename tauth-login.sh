@@ -10,7 +10,7 @@ INIT_TAUTH() {
     # GET THE SOURCE HOSTNAME AND IP
     SIP=$(echo $SSH_CONNECTION | awk '{print $1}')
     if [ "$SIP" != "" ]; then
-	$SHOST=$(getent hosts $SIP |awk '{print $NF}')
+	SHOST=$(getent hosts $SIP |awk '{print $NF}')
     fi
     [ "$SIP" = "" ] && SIP="UNKNOWN-IP"; 
     [ "$SHOST" = "" ] && SHOST="UNKNOWN-HOSTNAME"; 
